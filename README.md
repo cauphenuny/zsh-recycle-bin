@@ -36,11 +36,14 @@ $ delete [file]
 $ recover        # recover latest file
 $ recover [file] # recover specific file
 # also can use del as delete, rec as recover
-$ trash list # display files in recycle bin
-$ trash clear # clear files in recycle bin
+$ trash list # display trash_name in recycle bin
+$ trash delete [trash_name] # real remove trash by name
+$ trash clear # real remove trash which is not created today
 $ trash content # display details of files in recyble bin
 ```
-suggested to add in ~/.bashrc or ~/.zshrc:
+
+**suggested to add in ~/.bashrc or ~/.zshrc:**
+
 ```bash
 alias rm="delete -s"
 ```

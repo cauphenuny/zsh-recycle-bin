@@ -2,17 +2,20 @@ trash_dir="~/.trash"
 
 function delete {
     slient="false"
-    while getopts "sRrdfIiPWxv" arg
-    do
+    while getopts "sRrdfIiPWxv" arg; do
         case $arg in
             s)
-            slient="true"
-            ;;
+                slient="true"
+                ;;
+            v)
+                slient="false"
+                ;;
             ?)
-        ;;
+                ;;
         esac
     done
     shift $(( $OPTIND-1 ))
+    if [ $# -lt 1 ]; echo -e "${fg[red]}no operand!${reset_color}" && return 1;
     tim=$(date +'%F.%T')
     token=$(echo "$tim" | md5sum | cut -c 1-6)
     eval tdir=$trash_dir;
@@ -56,19 +59,40 @@ function recover {
 function trash {
     eval tdir=$trash_dir
     case $1 in
+        "content")
+            find $tdir -mindepth 2
+            ;;
         "list")
             ls $tdir
+            ;;
+        "delete")
+            shift 1
+            if [ $# -lt 1 ]; then
+                echo -e "usage: $0 delete [filename]\n\ntry \`trash list\` to find filename."
+                return 1
+            fi
+            echo -ne "remove ${fg[yellow]}$argv${reset_color}, are you sure? [y/n] "
+            read ans
+            if [ "$ans" = "y" ]; then
+                for file in $argv; do
+                    if ! [ -d $tdir/$file ]; then
+                        echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find filename."
+                        return 2
+                    fi
+                    command rm -rfv $tdir/$file
+                done
+            else
+                echo "terminated."
+            fi
             ;;
         "clear")
             echo -ne "clear all trashes that is not deleted today, are you sure? [y/n] "
             read ans
             if [ "$ans" = "y" ]; then
                 cur=$(date +'%F')
-                for dir in $(ls $tdir)
-                do
+                for dir in $(ls $tdir); do
                     if [ ${dir%%.*} != $cur ]; then
-                        echo "delete $dir"
-                        command rm -r $tdir/$dir
+                        command rm -rfv $tdir/$dir
                     fi
                 done
                 echo "cleared."
@@ -77,7 +101,7 @@ function trash {
             fi
             ;;
         *)
-            echo "$0 [list/clear]"
+            echo "usage: $0 [list/content/delete/clear]"
             ;;
     esac
 }
