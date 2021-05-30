@@ -1,6 +1,6 @@
 # zsh-recycle-bin
 
-A recycle bin runned in command line
+A recycle bin runned in command line for Bash and Zsh
 
 ## install
 
