@@ -17,13 +17,13 @@ git clone https://github.com/ycpedef/zsh-recycle-bin.git ${ZSH_CUSTOM:-~/.oh-my-
 plugins=( [plugins...] zsh-recycle-bin)
 ```
 
-### zsh
+### zsh (manual)
 ```
 git clone https://github.com/ycpedef/zsh-recycle-bin.git
 echo "source ${(q-)PWD}/zsh-recycle-bin/zsh-recycle-bin.plugin.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 ```
 
-### bash
+### bash (manual)
 ```
 git clone https://github.com/ycpedef/zsh-recycle-bin.git
 echo "source $(pwd)/zsh-recycle-bin/zsh-recycle-bin.plugin.zsh" >> $HOME/.bashrc
