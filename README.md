@@ -19,7 +19,34 @@ plugins=( [plugins...] zsh-recycle-bin)
 
 - others
 
+(zsh)
 ```
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git
-echo "source ${(q-)PWD}/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
+git clone https://github.com/ycpedef/zsh-recycle-bin.git
+echo "source ${(q-)PWD}/zsh-recycle-bin/zsh-recycle-bin.plugin.zsh" >> ${ZDOTDIR:-$HOME}/.zshrc
 ```
+
+(bash)
+```
+git clone https://github.com/ycpedef/zsh-recycle-bin.git
+echo "source $(pwd)/zsh-recycle-bin/zsh-recycle-bin.plugin.zsh" >> $HOME/.bashrc
+```
+
+## usage
+
+```bash
+$ delete [file]
+$ recover        # recover latest file
+$ recover [file] # recover specific file
+# also can use del as delete, rec as recover
+$ trash list # display files in recycle bin
+$ trash clear # clear files in recycle bin
+$ trash content # display details of files in recyble bin
+```
+suggested to add in ~/.bashrc or ~/.zshrc:
+```bash
+alias rm="delete -s"
+```
+
+## demo
+
+![demo.jpg](demo.jpg)
