@@ -19,6 +19,7 @@ function delete {
     tim=$(date +'%F.%T')
     token=$(echo "$tim" | md5sum | cut -c 1-6)
     eval tdir=$trash_dir;
+    ! [ -d $tdir ] && mkdir $tdir
     dir=$tdir/$tim/
     ! [ "$slient" = "true" ] && echo -e "remove ${fg[yellow]}$@${reset_color} to $trash_dir${reset_color} ..."
     ! [ -d $dir ] && mkdir $dir && command mv $@ $dir && \
@@ -27,6 +28,7 @@ function delete {
 
 function recover {
     eval tdir=$trash_dir;
+    ! [ -d $tdir ] && mkdir $tdir
     if [ $# -lt 1 ]; then
         if [ $(ls $tdir | wc -w) -lt 1 ]; then
             return 0
@@ -57,6 +59,7 @@ function recover {
 
 function trash {
     eval tdir=$trash_dir
+    ! [ -d $tdir ] && mkdir $tdir
     case $1 in
         "content")
             shift 1
