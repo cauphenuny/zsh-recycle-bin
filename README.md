@@ -32,10 +32,10 @@ echo "source $(pwd)/zsh-recycle-bin/zsh-recycle-bin.plugin.zsh" >> $HOME/.bashrc
 ## usage
 
 ```bash
-$ delete [file]
-$ delete -s [file]           # delete in slient mode
+$ delete [filename]
+$ delete -s [filename]       # delete in slient mode
 $ recover                    # recover latest file
-$ recover [file]             # recover specific file
+$ recover [trashname]        # recover specific file
 
 # also can use del as delete, rec as recover
 
