@@ -60,7 +60,7 @@ function trash {
     eval tdir=$trash_dir
     case $1 in
         "content")
-            find $tdir -mindepth 2
+            find $tdir -mindepth 2 | grep -v "\.trashinfo_"
             ;;
         "list")
             ls $tdir
