@@ -10,19 +10,18 @@ function delete {
             v)
                 slient="false"
                 ;;
-            ?)
+            *)
                 ;;
         esac
     done
     shift $(( $OPTIND-1 ))
-    if [ $# -lt 1 ]; echo -e "${fg[red]}no operand!${reset_color}" && return 1;
+    if [ $# -lt 1 ]; then echo -e "${fg[red]}no operand!${reset_color}" && return 1; fi
     tim=$(date +'%F.%T')
     token=$(echo "$tim" | md5sum | cut -c 1-6)
     eval tdir=$trash_dir;
     dir=$tdir/$tim/
     ! [ "$slient" = "true" ] && echo -e "remove ${fg[yellow]}$@${reset_color} to $trash_dir${reset_color} ..."
-    ! [ -d $dir ] && mkdir $dir
-    command mv $@ $dir &&
+    ! [ -d $dir ] && mkdir $dir && command mv $@ $dir && \
     echo -e "$(pwd)/" >> $dir/.trashinfo_$token
 }
 
