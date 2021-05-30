@@ -60,48 +60,52 @@ function trash {
     eval tdir=$trash_dir
     case $1 in
         "content")
-            find $tdir -mindepth 2 | grep -v "\.trashinfo_"
+            shift 1
+            if [ $# -lt 1 ]; then
+                find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_"
+            else
+                for file in $*
+                do
+                    [ -d $tdir/$file ] && find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file
+                done
+            fi
             ;;
         "list")
             ls $tdir
             ;;
-        "delete")
+        "clear")
             shift 1
             if [ $# -lt 1 ]; then
-                echo -e "usage: $0 delete [filename]\n\ntry \`trash list\` to find filename."
-                return 1
-            fi
-            echo -ne "remove ${fg[yellow]}$argv${reset_color}, are you sure? [y/n] "
-            read ans
-            if [ "$ans" = "y" ]; then
-                for file in $argv; do
-                    if ! [ -d $tdir/$file ]; then
-                        echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find filename."
-                        return 2
-                    fi
-                    command rm -rfv $tdir/$file
-                done
+                echo -ne "clear all trashes that is not deleted today, are you sure? [y/n] "
+                read ans
+                if [ "$ans" = "y" ]; then
+                    cur=$(date +'%F')
+                    for dir in $(ls $tdir); do
+                        if [ ${dir%%.*} != $cur ]; then
+                            command rm -rfv $tdir/$dir
+                        fi
+                    done
+                    echo "cleared."
+                else
+                    echo "terminated."
+                fi
             else
-                echo "terminated."
-            fi
-            ;;
-        "clear")
-            echo -ne "clear all trashes that is not deleted today, are you sure? [y/n] "
-            read ans
-            if [ "$ans" = "y" ]; then
-                cur=$(date +'%F')
-                for dir in $(ls $tdir); do
-                    if [ ${dir%%.*} != $cur ]; then
-                        command rm -rfv $tdir/$dir
-                    fi
-                done
-                echo "cleared."
-            else
-                echo "terminated."
+                echo -ne "remove ${fg[yellow]}$argv${reset_color}, are you sure? [y/n] "
+                read ans
+                if [ "$ans" = "y" ]; then
+                    for file in $argv; do
+                        if ! [ -d $tdir/$file ]; then
+                            echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find filename."
+                        fi
+                        command rm -rfv $tdir/$file
+                    done
+                else
+                    echo "terminated."
+                fi
             fi
             ;;
         *)
-            echo "usage: $0 [list/content/delete/clear]"
+            echo "usage: $0 [list/content/clear]"
             ;;
     esac
 }
