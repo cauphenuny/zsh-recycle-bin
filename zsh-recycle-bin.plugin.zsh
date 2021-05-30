@@ -1,6 +1,8 @@
+version="recycle-bin v1.1.0"
 trash_dir="~/.trash"
+eval tdir=$trash_dir;
 
-function delete {
+function __trash_delete {
     slient="false"
     while getopts "sRrdfIiPWxv" arg; do
         case $arg in
@@ -18,7 +20,6 @@ function delete {
     if [ $# -lt 1 ]; then echo -e "${fg[red]}no operand!${reset_color}" && return 1; fi
     tim=$(date +'%F.%T')
     token=$(echo "$tim" | md5sum | cut -c 1-6)
-    eval tdir=$trash_dir;
     ! [ -d $tdir ] && mkdir $tdir
     dir=$tdir/$tim/
     ! [ "$slient" = "true" ] && echo -e "remove ${fg[yellow]}$@${reset_color} to $trash_dir${reset_color} ..."
@@ -26,8 +27,7 @@ function delete {
     echo -e "$(pwd)/" >> $dir/.trashinfo_$token
 }
 
-function recover {
-    eval tdir=$trash_dir;
+function __trash_recover {
     ! [ -d $tdir ] && mkdir $tdir
     if [ $# -lt 1 ]; then
         if [ $(ls $tdir | wc -w) -lt 1 ]; then
@@ -57,60 +57,88 @@ function recover {
     fi
 }
 
-function trash {
-    eval tdir=$trash_dir
-    ! [ -d $tdir ] && mkdir $tdir
-    case $1 in
-        "content")
-            shift 1
-            if [ $# -lt 1 ]; then
-                find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_"
-            else
-                for file in $*
-                do
-                    [ -d $tdir/$file ] && find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file
-                done
-            fi
-            ;;
-        "list")
-            ls $tdir
-            ;;
-        "clear")
-            shift 1
-            if [ $# -lt 1 ]; then
-                echo -ne "clear all trashes that is not deleted today, are you sure? [y/n] "
-                read ans
-                if [ "$ans" = "y" ]; then
-                    cur=$(date +'%F')
-                    for dir in $(ls $tdir); do
-                        if [ ${dir%%.*} != $cur ]; then
-                            command rm -rfv $tdir/$dir
-                        fi
-                    done
-                    echo "cleared."
-                else
-                    echo "terminated."
-                fi
-            else
-                echo -ne "remove ${fg[yellow]}$argv${reset_color}, are you sure? [y/n] "
-                read ans
-                if [ "$ans" = "y" ]; then
-                    for file in $argv; do
-                        if ! [ -d $tdir/$file ]; then
-                            echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find filename."
-                        fi
-                        command rm -rfv $tdir/$file
-                    done
-                else
-                    echo "terminated."
-                fi
-            fi
-            ;;
-        *)
-            echo "usage: $0 [list/content/clear]"
-            ;;
-    esac
+function __trash_content {
+    if [ $# -lt 1 ]; then
+        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_"
+    else
+        for file in $*
+        do
+            [ -d $tdir/$file ] && find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file
+        done
+    fi
 }
 
-alias del="delete"
-alias rec="recover"
+function __trash_list {
+    ls $tdir
+}
+
+function __trash_clear {
+    if [ $# -lt 1 ]; then
+        echo -ne "clear all trashes that is not deleted today, are you sure? [y/n] "
+        read ans
+        if [ "$ans" = "y" ]; then
+            cur=$(date +'%F')
+            for dir in $(ls $tdir); do
+                if [ ${dir%%.*} != $cur ]; then
+                    command rm -rfv $tdir/$dir
+                fi
+            done
+            echo "cleared."
+        else
+            echo "terminated."
+        fi
+    else
+        echo -ne "remove ${fg[yellow]}$argv${reset_color}, are you sure? [y/n] "
+        read ans
+        if [ "$ans" = "y" ]; then
+            for file in $argv; do
+                if ! [ -d $tdir/$file ]; then
+                    echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find filename."
+                fi
+                command rm -rfv $tdir/$file
+            done
+        else
+            echo "terminated."
+        fi
+    fi
+}
+
+function __trash_version {
+    echo "$version"
+}
+
+function __trash_help {
+    cat <<EOF
+usage: trash <command> [options]
+
+available commands:
+  trash delete [filename]    # put file to recycle bin         
+  trash recover              # recover latest trash        
+  trash recover [trashname]  # recover [trashname]        
+  trash list                 # display trashname in recycle bin
+  trash clear                # real remove trash which is not created today
+  trash clear [trashname]    # real remove trash [trashname]
+  trash content              # display details of files in recyble bin
+  trash content [trashname]  # display details of [trashname] 
+  trash version              # display version
+
+# also can use del as trash delete, rec as trash recover
+EOF
+}
+
+function trash {
+    [[ $# -gt 0 ]] || {
+        __trash_help
+        return 1
+    }
+    local command="$1"
+    shift
+    type __trash_$command &>/dev/null || {
+        __trash_help
+        return 1
+    }
+    __trash_$command "$@"
+}
+
+alias del="trash delete"
+alias rec="trash recover"

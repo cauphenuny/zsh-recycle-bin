@@ -32,24 +32,24 @@ echo "source $(pwd)/zsh-recycle-bin/zsh-recycle-bin.plugin.zsh" >> $HOME/.bashrc
 ## usage
 
 ```bash
-$ delete [filename]
-$ delete -s [filename]       # delete in slient mode
-$ recover                    # recover latest file
-$ recover [trashname]        # recover specific file
-
-# also can use del as delete, rec as recover
-
+$ trash delete [filename]    # put file to recycle bin         
+$ trash recover              # recover latest trash        
+$ trash recover [trashname]  # recover [trashname]        
 $ trash list                 # display trashname in recycle bin
 $ trash clear                # real remove trash which is not created today
 $ trash clear [trashname]    # real remove trash [trashname]
 $ trash content              # display details of files in recyble bin
 $ trash content [trashname]  # display details of [trashname] 
+$ trash version              # display version
+
+# also can use del as `trash delete`, rec as `trash recover`
+
 ```
 
 **suggested to add in ~/.bashrc or ~/.zshrc:**
 
 ```bash
-alias rm="delete -s"
+alias rm="trash delete -s"
 ```
 
 ## demo
