@@ -59,7 +59,7 @@ function __trash_recover {
 
 function __trash_content {
     if [ $# -lt 1 ]; then
-        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_"
+        find $tdir -mindepth 1 | grep --color=never -v "\.trashinfo_"
     else
         for file in $*
         do
@@ -93,7 +93,7 @@ function __trash_clear {
         if [ "$ans" = "y" ]; then
             for file in $argv; do
                 if ! [ -d $tdir/$file ]; then
-                    echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find filename."
+                    echo "no such file: ${fg[yellow]}$file${reset_color}\ntry \`trash list\` to find trashname."
                 fi
                 command rm -rfv $tdir/$file
             done
@@ -112,9 +112,9 @@ function __trash_help {
 usage: trash <command> [options]
 
 available commands:
-  trash delete [filename]    # put file to recycle bin         
-  trash recover              # recover latest trash        
-  trash recover [trashname]  # recover [trashname]        
+  trash -d / delete [filename]    # put file to recycle bin         
+  trash -r / recover              # recover latest trash        
+  trash -r / recover [trashname]  # recover [trashname]        
   trash list                 # display trashname in recycle bin
   trash clear                # real remove trash which is not created today
   trash clear [trashname]    # real remove trash [trashname]
