@@ -80,7 +80,7 @@ function __trash_all {
 }
 
 function __trash_list {
-    ls $tdir
+    ls $tdir --color=none
 }
 
 function __trash_clear {
@@ -174,3 +174,4 @@ function trash {
 
 alias del="trash delete"
 alias rec="trash recover"
+
