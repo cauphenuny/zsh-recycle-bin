@@ -59,22 +59,22 @@ function __trash_recover {
 
 function __trash_content {
     if [ $# -lt 1 ]; then
-        find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=str; echo \${i#${tdir}/}"
+        find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
     else
         for file in $*
         do
-            [ -d $tdir/$file ] && find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file | xargs -d'\n' -I str bash -c "i=str; echo \${i#${tdir}/}"
+            [ -d $tdir/$file ] && find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
         done
     fi
 }
 
 function __trash_all {
     if [ $# -lt 1 ]; then
-        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=str; echo \${i#${tdir}/}"
+        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
     else
         for file in $*
         do
-            [ -d $tdir/$file ] && find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file | xargs -d'\n' -I str bash -c "i=str; echo \${i#${tdir}/}"
+            [ -d $tdir/$file ] && find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
         done
     fi
 }
