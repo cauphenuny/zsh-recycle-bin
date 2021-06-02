@@ -59,7 +59,7 @@ function __trash_recover {
 
 function __trash_content {
     if [ $# -lt 1 ]; then
-        find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
+        find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}" | sort -n
     else
         for file in $*
         do
@@ -70,7 +70,7 @@ function __trash_content {
 
 function __trash_all {
     if [ $# -lt 1 ]; then
-        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
+        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}" | sort -n
     else
         for file in $*
         do
