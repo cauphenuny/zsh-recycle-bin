@@ -148,7 +148,7 @@ function trash {
         __trash_help
         return 1
     }
-    local command="$1"
+    local cmd="$1"
     shift
     abbr=(
         '-d:delete'
@@ -160,16 +160,16 @@ function trash {
         '-h:help'
         '-a:all'
     );
-    for str in $abbr; do
-        if [ "${str%:*}" = "$command" ]; then
-            command=${str#*:}
+    for str in ${abbr[@]}; do
+        if [ "${str%:*}" = "$cmd" ]; then
+            cmd=${str#*:}
         fi
     done
-    type __trash_$command &>/dev/null || {
+    type __trash_$cmd &>/dev/null || {
         __trash_help
         return 1
     }
-    __trash_$command "$@"
+    __trash_$cmd "$@"
 }
 
 alias del="trash delete"
