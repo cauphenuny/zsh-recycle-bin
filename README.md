@@ -46,8 +46,8 @@ $ trash version              # display version
 
 # also can use del as trash delete, rec as trash recover
 # also can use -d as delete, -r as recover,
-               -l as list, -c as clear, -t as content, -a as all
-               -h as help, -v as version
+#              -l as list, -c as clear, -t as content, -a as all
+#              -h as help, -v as version
 ```
 
 **suggested to add in ~/.bashrc or ~/.zshrc:**

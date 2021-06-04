@@ -140,8 +140,8 @@ available commands:
 
 # also can use del as trash delete, rec as trash recover
 # also can use -d as delete, -r as recover,
-               -l as list, -c as clear, -t as content, -a as all
-               -h as help, -v as version
+#              -l as list, -c as clear, -t as content, -a as all
+#              -h as help, -v as version
 
 EOF
 }
