@@ -43,8 +43,9 @@ function __trash_recover {
     date=${date%%/*} &&
     token=$(echo "$date" | md5sum | cut -c 1-6) &&
     dest=$(cat $tdir/$date/.trashinfo_${token}) &&
+    readable_dest=${dest/"${HOME}"/"~"}
     ls $tdir/$date &&
-    echo -ne "-----\nrecover these file(s) to ${fg[yellow]}'$dest'${reset_color}? [y/n] " &&
+    echo -ne "-----\nrecover these file(s) to ${fg[yellow]}'$readable_dest'${reset_color}? [y/n] " &&
     read key
     if [ "$key" = "y" ]; then
         command mv $tdir/$date/* $dest/ &&
