@@ -18,7 +18,7 @@ function __trash_delete {
     done
     shift $(( $OPTIND-1 ))
     if [ $# -lt 1 ]; then echo -e "$0: missing operand" && return 1; fi
-    tim=$(date +'%F.%T')
+    tim=$(date +'%F_%T')
     token=$(echo "$tim" | md5sum | cut -c 1-6)
     ! [ -d $tdir ] && mkdir $tdir
     dir=$tdir/$tim/
