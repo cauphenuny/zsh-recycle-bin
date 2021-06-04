@@ -1,8 +1,8 @@
-version="recycle-bin v1.2.0"
+version="recycle-bin v1.2.1"
 trash_dir="~/.trash"
 eval tdir=$trash_dir;
 
-function __trash_delete {
+function __trash_delete() {
     slient="false"
     while getopts "sRrdfIiPWxv" arg; do
         case $arg in
@@ -27,7 +27,7 @@ function __trash_delete {
     echo -e "$(pwd)/" >> $dir/.trashinfo_$token
 }
 
-function __trash_recover {
+function __trash_recover() {
     ! [ -d $tdir ] && mkdir $tdir
     if [ $# -lt 1 ]; then
         if [ $(ls $tdir | wc -w) -lt 1 ]; then
@@ -45,7 +45,7 @@ function __trash_recover {
     dest=$(cat $tdir/$date/.trashinfo_${token}) &&
     readable_dest=${dest/"${HOME}"/"~"}
     ls $tdir/$date &&
-    echo -ne "-----\nrecover these file(s) to ${fg[yellow]}'$readable_dest'${reset_color}? [y/n] " &&
+    echo -ne "-----\nrecover to ${fg[yellow]}$readable_dest${reset_color} ? [y/n] " &&
     read key
     if [ "$key" = "y" ]; then
         command mv $tdir/$date/* $dest/ &&
@@ -58,7 +58,7 @@ function __trash_recover {
     fi
 }
 
-function __trash_content {
+function __trash_content() {
     if [ $# -lt 1 ]; then
         find $tdir -mindepth 2 -maxdepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}" | sort -n
     else
@@ -69,7 +69,7 @@ function __trash_content {
     fi
 }
 
-function __trash_all {
+function __trash_all() {
     if [ $# -lt 1 ]; then
         for file in $(find $tdir -mindepth 1 -maxdepth 1 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}" | sort -n)
         do
@@ -83,11 +83,11 @@ function __trash_all {
     fi
 }
 
-function __trash_list {
+function __trash_list() {
     ls $tdir --color=none
 }
 
-function __trash_clear {
+function __trash_clear() {
     if [ $# -lt 1 ]; then
         echo -ne "clear all trashes that is not deleted today, are you sure? [y/n] "
         read ans
@@ -118,11 +118,11 @@ function __trash_clear {
     fi
 }
 
-function __trash_version {
+function __trash_version() {
     echo "$version"
 }
 
-function __trash_help {
+function __trash_help() {
     cat <<EOF
 usage: trash <command> [options]
 
@@ -147,7 +147,7 @@ available commands:
 EOF
 }
 
-function trash {
+function trash() {
     [[ $# -gt 0 ]] || {
         __trash_help
         return 1
