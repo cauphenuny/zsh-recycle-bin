@@ -70,7 +70,10 @@ function __trash_content {
 
 function __trash_all {
     if [ $# -lt 1 ]; then
-        find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}" | sort -n
+        for file in $(find $tdir -mindepth 1 -maxdepth 1 | grep --color=never -v "\.trashinfo_" | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}" | sort -n)
+        do
+            [ -d $tdir/$file ] && find $tdir -mindepth 2 | grep --color=never -v "\.trashinfo_" | grep --color=never $file | xargs -d'\n' -I str bash -c "i=\"str\"; echo \${i#${tdir}/}"
+        done
     else
         for file in $*
         do

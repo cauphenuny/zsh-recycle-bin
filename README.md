@@ -40,10 +40,14 @@ $ trash clear                # real remove trash which is not created today
 $ trash clear [trashname]    # real remove trash [trashname]
 $ trash content              # display details of files in recyble bin
 $ trash content [trashname]  # display details of [trashname] 
+$ trash all [trashname]      # display all files in recyble bin
+$ trash all [trashname]      # display all files in [trashname] 
 $ trash version              # display version
 
-# also can use del as `trash delete`, rec as `trash recover`
-
+# also can use del as trash delete, rec as trash recover
+# also can use -d as delete, -r as recover,
+               -l as list, -c as clear, -t as content, -a as all
+               -h as help, -v as version
 ```
 
 **suggested to add in ~/.bashrc or ~/.zshrc:**
