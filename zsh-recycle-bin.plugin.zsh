@@ -17,7 +17,7 @@ function __trash_delete {
         esac
     done
     shift $(( $OPTIND-1 ))
-    if [ $# -lt 1 ]; then echo -e "${fg[red]}no operand!${reset_color}" && return 1; fi
+    if [ $# -lt 1 ]; then echo -e "$0: missing operand" && return 1; fi
     tim=$(date +'%F.%T')
     token=$(echo "$tim" | md5sum | cut -c 1-6)
     ! [ -d $tdir ] && mkdir $tdir
